@@ -1,0 +1,67 @@
+-- ------------------------------------------------------------
+-- MASSA DE DADOS (POPULAÇÃO DO BANCO)
+-- ------------------------------------------------------------
+
+-- Clientes (Respeitando a regra: se limite > 0, precisa ter CPF)
+INSERT INTO cliente (id_cliente, nome, telefone, data_nascimento, limite_credito, situacao_crediario, cpf) VALUES
+(1, 'Mariana Alves', '(11) 99999-1001', '1995-03-12', 800.00, 'liberado', '12345678901'),
+(2, 'Rafael Souza',  '(11) 99999-1002', '1998-07-25', 500.00, 'liberado', '98765432100'),
+(3, 'Beatriz Lima',  '(11) 99999-1003', '2002-11-02', 300.00, 'restrito', '45678912344'),
+(4, 'Camila Rocha',  '(11) 99999-1004', '1999-01-19', 1000.00, 'liberado', '78912345655'),
+(5, 'Lucas Silva',   '(11) 99999-1005', '2000-05-15', 0.00, 'liberado', NULL); -- Compra apenas à vista, sem CPF
+
+-- Colaboradores
+INSERT INTO colaborador (id_colaborador, nome, tipo) VALUES
+(1, 'Ana Paula',      'dona'),
+(2, 'Julia Martins',  'freelancer'),
+(3, 'Nathalia Costa', 'freelancer');
+
+-- Fornecedores
+INSERT INTO fornecedor (id_fornecedor, nome, cnpj) VALUES
+(1, 'Fabrica Pequenos Estilos', '12.345.678/0001-90'),
+(2, 'Acessorios Brilho',        '98.765.432/0001-10');
+
+-- Representantes
+INSERT INTO representante (id_representante, nome, telefone, cnpj) VALUES
+(1, 'Carlos Mendes',  '(11) 98888-1100', '11.111.111/0001-11'),
+(2, 'Patricia Nunes', '(11) 98888-2200', '22.222.222/0001-22');
+
+-- Associação Fornecedor e Representante
+INSERT INTO fornecedor_representante (id_fornecedor, id_representante) VALUES 
+(1, 1), 
+(1, 2), 
+(2, 2);
+
+-- Produtos (Respeitando os domínios de tamanho, categoria e cores obrigatórias para roupas)
+INSERT INTO produto (id_produto, id_fornecedor, descricao, categoria, tamanho, cor, colecao, preco_custo, preco_venda, quantidade_estoque) VALUES
+(1, 1, 'Conjunto moletom estrela', 'roupa',     '8',  'azul',  'inverno',   55.00, 121.00, 12),
+(2, 1, 'Vestido floral',           'roupa',     '10', 'rosa',  'primavera', 48.00, 105.60,  8),
+(3, 1, 'Camiseta basica',          'roupa',     '12', 'branca','verao',     22.00,  48.40, 20),
+(4, 2, 'Tiara colorida',           'acessorio', NULL, 'lilas', 'primavera',  8.00,  17.60, 15),
+(5, 2, 'Mochila juvenil',          'acessorio', NULL, 'preta', 'outono',    45.00,  99.00,  5);
+
+-- Vendas (Canais ajustados exatamente ao CHECK do banco)
+INSERT INTO venda (id_venda, id_cliente, id_colaborador, data_hora, canal, forma_pagamento, tipo_entrega, percentual_desconto, data_hora_cancelamento) VALUES
+(1, 1, 1, '2026-10-10 10:30:00', 'loja fisica',      'pix',       'retirada', 0.00, NULL),
+(2, 2, 2, '2026-10-11 14:15:00', 'instagram',        'crediario', 'uber',     5.00, NULL),
+(3, 4, 3, '2026-10-12 16:00:00', 'whatsapp business', 'cartao',    'retirada', 0.00, NULL),
+(4, 3, 1, '2026-10-13 11:00:00', 'loja fisica',      'dinheiro',  'retirada', 10.00, '2026-10-13 15:30:00'); -- Venda Cancelada dentro de 24h
+
+-- Itens das Vendas
+INSERT INTO item_venda (id_venda, id_produto, quantidade, preco_unitario) VALUES
+(1, 1, 1, 121.00), -- Venda 1
+(1, 4, 2, 17.60),  -- Venda 1
+(2, 2, 1, 105.60), -- Venda 2 (Parcelada)
+(3, 3, 2, 48.40),  -- Venda 3
+(3, 5, 1, 99.00),  -- Venda 3
+(4, 1, 1, 121.00); -- Venda 4 (Cancelada)
+
+-- Parcelas (Apenas para a Venda 2 que possui a forma 'crediario')
+-- Cálculo do valor da Parcela 2: Venda total de 105.60 com 5% de desconto = 100.32 -> dividido em 2 parcelas de 50.16
+INSERT INTO parcela (id_venda, numero_parcela, valor_parcela, data_vencimento, data_pagamento) VALUES
+(2, 1, 50.16, '2026-11-11', '2026-11-10'), -- Paga em dia
+(2, 2, 50.16, '2026-12-11', NULL);         -- Em aberto
+
+-- Trocas e Devoluções
+INSERT INTO troca_devolucao (id_troca, id_venda, id_produto, id_colaborador, tipo, quantidade, data_hora) VALUES
+(1, 1, 4, 2, 'troca', 1, '2026-10-11 09:00:00'); -- Trocou 1 das 2 tiaras compradas
