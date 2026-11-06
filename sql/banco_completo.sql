@@ -21,7 +21,6 @@ CREATE TABLE cliente (
     situacao_crediario  VARCHAR(10) NOT NULL DEFAULT 'liberado',
     cpf                 VARCHAR(11),
     
-    CONSTRAINT uk_cliente_telefone UNIQUE (telefone),
     CONSTRAINT uk_cliente_cpf UNIQUE (cpf),
     CONSTRAINT ck_cliente_limite_credito CHECK (limite_credito >= 0),
     CONSTRAINT ck_cliente_situacao CHECK (situacao_crediario IN ('liberado', 'restrito')),
