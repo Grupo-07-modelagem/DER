@@ -6,7 +6,7 @@
 INSERT INTO cliente (id_cliente, nome, telefone, data_nascimento, limite_credito, situacao_crediario, cpf) VALUES
 (1, 'Mariana Alves', '(11) 99999-1001', '1995-03-12', 800.00, 'liberado', '12345678901'),
 (2, 'Rafael Souza',  '(11) 99999-1002', '1998-07-25', 500.00, 'liberado', '98765432100'),
-(3, 'Beatriz Lima',  '(11) 99999-1003', '2002-11-02', 300.00, 'restrito', '45678912344'),
+(3, 'Beatriz Lima',  '(11) 99999-1003', '2002-11-02', 300.00, 'liberado', '45678912344'),
 (4, 'Camila Rocha',  '(11) 99999-1004', '1999-01-19', 1000.00, 'liberado', '78912345655'),
 (5, 'Lucas Silva',   '(11) 99999-1005', '2000-05-15', 0.00, 'liberado', NULL); -- Compra apenas à vista, sem CPF
 
